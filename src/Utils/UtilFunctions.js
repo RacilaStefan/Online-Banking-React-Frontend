@@ -31,3 +31,52 @@ export async function FetchUserData() {
 
     return data;
 }
+
+export async function UpdateField(value, context, setContext) {
+    const keyFound = Object.keys(value)[0];
+
+    log.trace("Key Found", keyFound);
+    
+    if (context.user[keyFound] !== undefined) {
+        const user = {};
+        Object.keys(context.user).forEach(key => {
+            if (key === keyFound) {
+                user[key] = value[key];
+            } else {
+                user[key] = context.user[key];
+            }
+        });
+
+        log.trace("Updated User", user);
+        
+        axios.put(
+                context.user._links.self.href,
+                {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    username: user.username,
+                    telephoneNumber: user.telephoneNumber,
+                }
+            ).then((response) => {
+                setContext({user: user})
+                log.info(response.data);
+            }).catch((error) => {
+                log.error(error);
+            });
+        
+        return;
+    }
+
+    if (context.user.address[keyFound] !== undefined) {
+        const address = {};
+        Object.keys(context.user.address).forEach(key => {
+            if (key === keyFound) {
+                address[key] = value[key];
+            } else {
+                address[key] = context.user.address[key];
+            }
+        }); 
+        log.trace("Updated Address", address);
+        return;
+    }
+}

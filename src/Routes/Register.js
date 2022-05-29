@@ -2,7 +2,7 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import React from "react"
 import axios from "../api/axios"
-import { REGISTER_URL } from "../Utils/Constants";
+import { REGISTER_URL, VST } from "../Utils/Constants";
 
 import UserRegistrationForm from "./RegistrationForms/UserRegistrationForm";
 import AddressRegistrationForm from "./RegistrationForms/AddressRegistrationForm";
@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
     
     // #### TODO contants with schemas #### //
 
-    firstName: Yup.string().required(requiredString),
+    firstName: VST.REQUIRED_STRING,
     lastName: Yup.string().required(requiredString),
     email: Yup.string().required(requiredString).email("Ckeck email format."),
     telephoneNumber: Yup.string().required(requiredString).matches("[0-9]{10}", "Invalid telephone number."),
@@ -44,6 +44,8 @@ const validationSchema = Yup.object({
     currency: Yup.string().required(requiredString),
     type: Yup.string().required(requiredString),
 });
+
+log.trace("Validation Schema", validationSchema);
 
 const initialValues = {
     firstName: 'Popescu',

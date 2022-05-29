@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { Navigate, NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import Context from "../Components/ContextProvider";
 import { LOGOUT_URL, PATHS } from "../Utils/Constants";

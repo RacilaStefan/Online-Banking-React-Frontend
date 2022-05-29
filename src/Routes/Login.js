@@ -6,6 +6,7 @@ import Context from "../Components/ContextProvider";
 import { LOGIN_URL, PATHS } from "../Utils/Constants";
 import { Navigate } from "react-router-dom";
 import { Logger } from "../Utils/Logger";
+import Button from "@mui/material/Button";
 
 const log = new Logger("Login Page");
 
@@ -59,10 +60,10 @@ export default function Login() {
                         <Field name="password" type="password"/>
                         <ErrorMessage name="password"/>
                     </div>
-                    <button className="btn waves-effect waves-light" type="submit">
+                    <Button variant="contained" type="submit">
                         Log in
                         <i className="material-icons right">send</i>
-                    </button>
+                    </Button>
                 </Form>
             </Formik>
         </div>

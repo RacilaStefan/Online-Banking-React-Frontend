@@ -1,3 +1,5 @@
+import * as Yup from "yup";
+
 export const REGISTER_URL = "/api/v2/users"
 export const USER_BASE_URL = "/api/v2/users"
 export const LOGIN_URL = "/auth/login";
@@ -37,7 +39,21 @@ export const PATHS = {
 
 };
 
+const reqStr = "Required";
+
+const VALIDATION_SCHEMA_TEMPLATES = {
+    REQUIRED_STRING: Yup.string().required(reqStr),
+}
+
+export const VST = VALIDATION_SCHEMA_TEMPLATES;
+
+export const VALIDATION_SCHEMA = {
+    firstName: VST.REQUIRED_STRING,
+}
+
 Object.freeze(CURRECIES);
 Object.freeze(ACCOUNT_TYPES);
 Object.freeze(ROLES);
 Object.freeze(PATHS);
+Object.freeze(VALIDATION_SCHEMA);
+Object.freeze(VST);

@@ -24,12 +24,9 @@ import Footer from "./Components/Footer";
 import { ContextProvider } from "./Components/ContextProvider";
 import { PATHS } from "./Utils/Constants";
 
-import M from "materialize-css/dist/js/materialize.min.js";
+import { Logger } from "./Utils/Logger";
 
-document.addEventListener('DOMContentLoaded', function() {
-  var elems = document.querySelectorAll('.modal');
-  var instances = M.Modal.init(elems);
-});
+const log = new Logger("Index Page");
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,8 +1,14 @@
 import { Logger } from "../Utils/Logger";
+import { Modal, Button } from "@mui/material";
+import { useState } from "react";
+import ProfileItemFrom from "./ProfileItemFrom";
 
 const log = new Logger("Profile Item");
 
-export default function ProfileItem({ label, value, isEditable = true, getCount }) {
+export default function ProfileItem({ label, value, isEditable = true, getCount, name }) {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     let count;
     if (getCount !== undefined)
@@ -19,16 +25,18 @@ export default function ProfileItem({ label, value, isEditable = true, getCount 
             </div>
             { isEditable ? 
             <div className="col s6">
-                <a className="waves-effect waves-light btn modal-trigger" href={`#modal${count}`}>Edit</a> 
-                <div id={`#modal${count}`} className="modal">
-                    <div className="modal-content">
-                        <h4>Modal Header</h4>
-                        <p>A bunch of text</p>
-                    </div>
-                    <div className="modal-footer">
-                        <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
-                    </div>
+            <Button variant="contained" onClick={handleOpen}>Edit</Button>
+            <Modal 
+                open={open}
+                onClose={handleClose}
+                aria-labelledby={ `modal-modal-title${count}` }
+                aria-describedby={ `modal-modal-description${count}` }>
+
+                <div className="container modal-form">
+                    <p> { label } </p>
+                    <ProfileItemFrom id={ `modal-modal-description${count}` } value={ value } name={ name } />
                 </div>
+            </Modal>
             </div> : <></> }
         </div>
     );
