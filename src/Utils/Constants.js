@@ -1,4 +1,9 @@
 import * as Yup from "yup";
+import { Logger } from "./Logger";
+
+const log = new Logger("Constants");
+
+log.info("Loaded");
 
 export const REGISTER_URL = "/api/v2/users"
 export const USER_BASE_URL = "/api/v2/users"
@@ -49,7 +54,29 @@ export const VST = VALIDATION_SCHEMA_TEMPLATES;
 
 export const VALIDATION_SCHEMA = {
     firstName: VST.REQUIRED_STRING,
-}
+    lastName: VST.REQUIRED_STRING,
+    email: VST.REQUIRED_STRING.email("Ckeck email format."),
+    telephoneNumber: VST.REQUIRED_STRING.matches(/^[0-9]{10}$/, "Invalid telephone number."),
+    username: VST.REQUIRED_STRING,
+    password: VST.REQUIRED_STRING,
+    passConfirm: VST.REQUIRED_STRING.oneOf([Yup.ref('password'), null], 'Passwords must match'),
+
+    country: VST.REQUIRED_STRING,
+    region: VST.REQUIRED_STRING,
+    city: VST.REQUIRED_STRING,
+    street: VST.REQUIRED_STRING,
+    number: VST.REQUIRED_STRING,
+    staircase: VST.REQUIRED_STRING,
+    apartment: VST.REQUIRED_STRING,
+
+    cnp: VST.REQUIRED_STRING,
+    series: VST.REQUIRED_STRING,
+    cnp_number: VST.REQUIRED_STRING,
+    expirationDate: Yup.date("Invalid date format").required("Required"),
+
+    currency: VST.REQUIRED_STRING,
+    type: VST.REQUIRED_STRING, 
+};
 
 Object.freeze(CURRECIES);
 Object.freeze(ACCOUNT_TYPES);

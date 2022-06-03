@@ -1,4 +1,4 @@
-import CustomTextFormField from "../../Components/CustomTextFormField";
+import CustomTextFormField from "../FormComponents/CustomTextFormField";
 
 export default function UserRegistrationForm() {
     return (

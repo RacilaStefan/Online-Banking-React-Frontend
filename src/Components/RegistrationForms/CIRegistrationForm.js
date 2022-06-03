@@ -1,4 +1,4 @@
-import CustomTextFormField from "../../Components/CustomTextFormField";
+import CustomTextFormField from "../../Components/FormComponents/CustomTextFormField";
 
 export default function AddressRegistrationForm() {
     return (

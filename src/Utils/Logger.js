@@ -1,28 +1,57 @@
 export class Logger {
-    constructor(className) {
-        this.className = className;
+    constructor(locationName) {
+        this.locationName = locationName;
     }
 
     error(text) {
-        let output = `${new Date().toLocaleTimeString({hour12: false})} ${LOG_TYPES.ERROR} [${this.className}] ${text}`;
-        console.log(output);
+        let output = `${getTime()} ${LOG_TYPES.ERROR} [%c${this.locationName}%c] ${text}`;
+        console.log(output, "color:#f51e0f", "", "color:#9997fc", "");
+    }
+
+    apiError(error) { // from axios docs
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            let output = `${getTime()} ${LOG_TYPES.ERROR} [%c${this.locationName}%c]`;
+            output += ` Request [${error.config.method.toString().toUpperCase()}] ${error.config.baseURL}${error.config.url}`;
+            output += ` failed with status code ${error.response.status}`;
+
+            console.log(output, "color:#f51e0f", "", "color:#9997fc", "");
+            console.log(`Message "${error.response.data.error}"`);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            error(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            error(error.message);
+        }
     }
 
     info(text) {
-        let output = `${new Date().toLocaleTimeString({hour12: false})} ${LOG_TYPES.INFO} [${this.className}] ${text}`;
-        console.log(output);
+        let output = `${getTime()} ${LOG_TYPES.INFO} [%c${this.locationName}%c] ${text}`;
+        console.log(output, "color:#02f20a", "", "color:#9997fc", "");
     }
 
     trace(name, text) {
-        let output = `${new Date().toLocaleTimeString({hour12: false})} ${LOG_TYPES.TRACE} [${this.className}] ${name}= `;
-        console.log(output);
+        let output = `${getTime()} ${LOG_TYPES.TRACE} [%c${this.locationName}%c] ${name}= `;
+        console.log(output, "color:yellow", "", "color:#9997fc", "");
         console.log(text);
     }
 }
 
 export const LOG_TYPES = {
-    INFO: "[INFO]",
-    DEBUG: "[DEBUG]",
-    ERROR: "[ERROR]",
-    TRACE: "[TRACE]",
+    INFO: "[%cINFO%c]",
+    DEBUG: "[%cDEBUG%c]",
+    ERROR: "[%cERROR%c]",
+    TRACE: "[%cTRACE%c]",
 };
+
+function getTime() {
+    return new Date().toLocaleTimeString('en-US', { hour12: false });
+}
+
+const log = new Logger("Logger");
+
+log.info("Loaded");

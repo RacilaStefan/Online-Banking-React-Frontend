@@ -1,51 +1,17 @@
 import { Form, Formik } from "formik";
-import * as Yup from "yup";
 import React from "react"
 import axios from "../api/axios"
-import { REGISTER_URL, VST } from "../Utils/Constants";
-
-import UserRegistrationForm from "./RegistrationForms/UserRegistrationForm";
-import AddressRegistrationForm from "./RegistrationForms/AddressRegistrationForm";
-import CIRegistrationForm from "./RegistrationForms/CIRegistrationForm";
-import AccountRegistrationForm from "./RegistrationForms/AccountRegistrationForm";
+import { REGISTER_URL, VALIDATION_SCHEMA } from "../Utils/Constants";
+import * as Yup from "yup";
+import UserRegistrationForm from "../Components/RegistrationForms/UserRegistrationForm";
+import AddressRegistrationForm from "../Components/RegistrationForms/AddressRegistrationForm";
+import CIRegistrationForm from "../Components/RegistrationForms/CIRegistrationForm";
+import AccountRegistrationForm from "../Components/RegistrationForms/AccountRegistrationForm";
 import { Logger } from "../Utils/Logger";
 
 const NUMBER_OF_FORMS = 3
 
-const requiredString = "Required";
-
 const log = new Logger("Register Page");
-
-const validationSchema = Yup.object({
-    
-    // #### TODO contants with schemas #### //
-
-    firstName: VST.REQUIRED_STRING,
-    lastName: Yup.string().required(requiredString),
-    email: Yup.string().required(requiredString).email("Ckeck email format."),
-    telephoneNumber: Yup.string().required(requiredString).matches("[0-9]{10}", "Invalid telephone number."),
-    username: Yup.string().required(requiredString),
-    password: Yup.string().required(requiredString),
-    passConfirm: Yup.string().required(requiredString).oneOf([Yup.ref('password'), null], 'Passwords must match'),
-
-    country: Yup.string().required(requiredString),
-    region: Yup.string().required(requiredString),
-    city: Yup.string().required(requiredString),
-    street: Yup.string().required(requiredString),
-    number: Yup.string().required(requiredString),
-    staircase: Yup.string().required(requiredString),
-    apartment: Yup.string().required(requiredString),
-
-    cnp: Yup.string().required(requiredString),
-    series: Yup.string().required(requiredString),
-    cnp_number: Yup.string().required(requiredString),
-    expirationDate: Yup.date("Invalid date format").required(requiredString),
-
-    currency: Yup.string().required(requiredString),
-    type: Yup.string().required(requiredString),
-});
-
-log.trace("Validation Schema", validationSchema);
 
 const initialValues = {
     firstName: 'Popescu',
@@ -158,11 +124,11 @@ export default class Register extends React.Component {
         }
 
         log.trace("Current Form", this.state.currentForm);
-
+        
         return (
             <Formik
                 initialValues = {initialValues}
-                validationSchema = {validationSchema}
+                validationSchema = {Yup.object({...VALIDATION_SCHEMA})}
                 onSubmit = {this.handleSubmit}
             >
                 <Form>

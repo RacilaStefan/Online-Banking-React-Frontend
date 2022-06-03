@@ -1,8 +1,12 @@
+import RequireAuth from "../Components/RequireAuth";
+
 export default function Dashboard() {
 
     return (
-        <div className="container">
-            <p>Dashboard Page</p>
-        </div>
+        <RequireAuth>
+            <div className="container">
+                <h4>Dashboard</h4>
+            </div>
+        </RequireAuth>
     );
 }

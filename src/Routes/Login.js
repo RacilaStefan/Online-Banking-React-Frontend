@@ -1,12 +1,14 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useContext } from "react";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "../api/axios";
-import Context from "../Components/ContextProvider";
 import { LOGIN_URL, PATHS } from "../Utils/Constants";
+import { fetchUserData } from "../Utils/UtilFunctions";
 import { Navigate } from "react-router-dom";
 import { Logger } from "../Utils/Logger";
 import Button from "@mui/material/Button";
+import CustomTextFormField from "../Components/FormComponents/CustomTextFormField";
+import { useAtom } from "jotai";
+import { contextAtom } from "../Components/Context/ContextProvider";
 
 const log = new Logger("Login Page");
 
@@ -25,8 +27,18 @@ async function handleSubmit(values, setContext) {
         {
             header: {'Content-Type' : 'aplication/json'},
         }).then((response) => {
-            setContext({ isLoggedIn: true });
-            log.info("User logged in");
+            async function fetchData() {
+                const data = await fetchUserData();
+                //log.trace("Fetched data", data);
+                if (data === false) {
+                    setContext({ isLoggedIn: false });
+                } else {
+                    setContext({ isLoggedIn: true, user: {...data}});
+                }
+            }
+
+            fetchData();
+            log.info(response.data);
         }).catch((error) => {
             log.error(error);
         });
@@ -38,28 +50,20 @@ const validationSchema = Yup.object({
 });
 
 export default function Login() {
-    const { context, setContext } = useContext(Context);
+    const [ context, setContext ] = useAtom(contextAtom);
     const redirect = context.isLoggedIn ? <Navigate to={PATHS.DASHBOARD}/> : <></>;
     
     return (
         <div className="container">
-            {redirect}
+            {redirect} 
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={(values) => handleSubmit(values, setContext)}
                 >
                 <Form>
-                    <div className="input-field">
-                        <label htmlFor="username">Username</label>
-                        <Field name="username" type="text" className="validate" autoComplete="off"/>
-                        <ErrorMessage name="username" className="red-text"/>
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="password">Password</label>
-                        <Field name="password" type="password"/>
-                        <ErrorMessage name="password"/>
-                    </div>
+                    <CustomTextFormField name="username" text="Username"/>
+                    <CustomTextFormField name="password" text="Password" type="password"/>
                     <Button variant="contained" type="submit">
                         Log in
                         <i className="material-icons right">send</i>

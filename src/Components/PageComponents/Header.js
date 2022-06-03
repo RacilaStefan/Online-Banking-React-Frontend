@@ -1,35 +1,39 @@
 import { NavLink } from "react-router-dom";
-import "../resources/css/header.css";
-import Context from "./ContextProvider";
-import { useContext } from "react";
-import { PATHS, ROLES } from "../Utils/Constants";
+import "../../resources/css/header.css";
+import { contextAtom } from "../Context/ContextProvider";
+import { useEffect } from "react";
+import { PATHS, ROLES } from "../../Utils/Constants";
 import NavItem from "./NavItem";
-import { Logger } from "../Utils/Logger";
+import { Logger } from "../../Utils/Logger";
+import { useAtom } from "jotai";
 
 const log = new Logger("Header Component");
 
 export default function Header() {
-    const { context } = useContext(Context);
+    const [ context ] = useAtom(contextAtom);
 
     const userNav = [];
-    if (context.isLoggedIn) {
+
+    log.trace("context", context);
+    if (context.isLoggedIn !== undefined && context.isLoggedIn) {
         userNav.push(<NavItem key={PATHS.DASHBOARD} path={PATHS.DASHBOARD}>Dashboard</NavItem>);
         userNav.push(<NavItem key={PATHS.PROFILE} path={PATHS.PROFILE}>Profile</NavItem>);
         userNav.push(<NavItem key={PATHS.LOGOUT} path={PATHS.LOGOUT}>Logout</NavItem>);
 
-        log.trace("Context", context);
-        try {
-            switch (context.user.role) {
-                case ROLES.ROLE_ADMIN: 
-                    userNav.push( <NavItem key={PATHS.ADMINPAGE} path={PATHS.ADMINPAGE}>Admin Page</NavItem>); 
-                    break;
-                default: break;
-            }
-        } catch(error) { }
+        switch (context.user.role) {
+            case ROLES.ROLE_ADMIN: 
+                userNav.push( <NavItem key={PATHS.ADMINPAGE} path={PATHS.ADMINPAGE}>Admin Page</NavItem>); 
+                break;
+            default: break;
+        }
     } else {
         userNav.push(<NavItem key={PATHS.LOGIN} path={PATHS.LOGIN}>Login</NavItem>);
         userNav.push(<NavItem key={PATHS.REGISTER} path={PATHS.REGISTER}>Register</NavItem>);
     }
+
+    useEffect(() => {
+        //log.info("Mounted");
+    }, []);
 
     return (
         <nav>

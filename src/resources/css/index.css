@@ -16,4 +16,10 @@ select {
     border: 2px solid #000;
     padding: 1%;
     background-color: aliceblue;
-  };
+}
+
+.modal-form .close-btn {
+    position: absolute;
+    left: 85%;
+    top: 7%;
+}

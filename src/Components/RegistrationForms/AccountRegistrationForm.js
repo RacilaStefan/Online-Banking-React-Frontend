@@ -1,4 +1,4 @@
-import CustomSelectFormField from "../../Components/CustomSelectFormField";
+import CustomSelectFormField from "../../Components/FormComponents/CustomSelectFormField";
 import { CURRECIES, ACCOUNT_TYPES } from "../../Utils/Constants";
 
 export default function AccountRegistrationForm() {

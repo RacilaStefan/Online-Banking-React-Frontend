@@ -11,29 +11,28 @@ export default function Home() {
     const [users, setUsers] = useState({});
 
     useEffect(() => {
+        //log.info("Mounted");
         axios.get("https://baconipsum.com/api/?type=all-meat&paras=2", { withCredentials: false })
             .then((response) => {
                 const text = response.data;
-                log.info("Text from bacon ipsum fetched.");
+                //log.info("Text from bacon ipsum fetched.");
                 setBaconIpsum(text);
             }).catch((error) => {
-                log.error(error);
+                log.apiError(error);
             });
         
         axios.get(USER_BASE_URL)
             .then((reponse) => {
                 const users = reponse.data;
-                log.trace("Users array", users);
                 setUsers({...users});
             }).catch(function(error) {
-                log.error(error);
+                log.apiError(error);
             });
-    
     }, []);
 
     return (
         <div className="container">
-            <h1>Home</h1>
+            <h4>Home</h4>
             <p>{baconipsum}</p>
             <pre>{JSON.stringify(users, null, 2)}</pre>
         </div>
