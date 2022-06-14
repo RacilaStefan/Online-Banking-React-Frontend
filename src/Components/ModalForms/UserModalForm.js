@@ -1,9 +1,8 @@
 import { Modal, Button } from "@mui/material";
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef } from "react";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { VALIDATION_SCHEMA } from "../../Utils/Constants";
-import Context from "../Context/ContextProvider";
 import { updateFields } from "../../Utils/UtilFunctions";
 import CustomTextFormField from "../FormComponents/CustomTextFormField";
 import YesNoModal from "./YesNoModal";
@@ -11,31 +10,24 @@ import { Logger } from "../../Utils/Logger";
 import { useAtom } from "jotai";
 import { contextAtom } from "../Context/ContextProvider";
 
-const log = new Logger("Address Modal Form");
+const log = new Logger("User Modal Form");
 
 const validationSchema = Yup.object({
-   country: VALIDATION_SCHEMA.country,
-   region: VALIDATION_SCHEMA.region,
-   city: VALIDATION_SCHEMA.city,
-   street: VALIDATION_SCHEMA.street,
-   number: VALIDATION_SCHEMA.number,
-   staircase: VALIDATION_SCHEMA.staircase,
-   apartment: VALIDATION_SCHEMA.apartment,
+    firstName: VALIDATION_SCHEMA.firstName,
+    lastName: VALIDATION_SCHEMA.lastName,
+    username: VALIDATION_SCHEMA.username,
+    telephoneNumber: VALIDATION_SCHEMA.telephoneNumber,
 })
 
-export default function AddressModalForm({ open, close: handleClose }) {
+export default function UserModalForm({ open, close: handleClose }) {
     const [ context, setContext ] = useAtom(contextAtom);
     const [ showYesNoDialog, setShowYesNoDialog ] = useState(false);
     const formReff = useRef(null);
-    
     const initialValues = {
-        country: context.user.address.country,
-        region: context.user.address.region,
-        city: context.user.address.city,
-        street: context.user.address.street,
-        number: context.user.address.number,
-        staircase: context.user.address.staircase,
-        apartment: context.user.address.apartment,
+        firstName: context.user.firstName,
+        lastName: context.user.lastName,
+        username: context.user.username,
+        telephoneNumber: context.user.telephoneNumber,
     };
 
     const closeDialog = () => {
@@ -60,8 +52,7 @@ export default function AddressModalForm({ open, close: handleClose }) {
     }
 
     const handleSubmit = (value) => {
-        const result = handleApply();
-        if (!result) return;
+        if (!handleApply()) return;
 
         setShowYesNoDialog(false);
         updateFields(value, context, setContext);
@@ -77,7 +68,7 @@ export default function AddressModalForm({ open, close: handleClose }) {
 
             <div className="container modal-form">
                 <div id="modal-modal-description">
-                    <p> Edit Address </p>
+                    <p> Edit User </p>
                     <Formik
                         initialValues={initialValues}
                         innerRef={formReff}
@@ -85,13 +76,10 @@ export default function AddressModalForm({ open, close: handleClose }) {
                         onSubmit={handleSubmit}
                         >
                         <Form>
-                            <CustomTextFormField name="country" text="Country"/>
-                            <CustomTextFormField name="region" text="Region"/>
-                            <CustomTextFormField name="city" text="City"/>
-                            <CustomTextFormField name="street" text="Street"/>
-                            <CustomTextFormField name="number" text="Number"/>
-                            <CustomTextFormField name="staircase" text="Staircase"/>
-                            <CustomTextFormField name="apartment" text="Apartment"/>
+                            <CustomTextFormField name="firstName" text="First Name"/>
+                            <CustomTextFormField name="lastName" text="Last Name"/>
+                            <CustomTextFormField name="username" text="Username"/>
+                            <CustomTextFormField name="telephoneNumber" text="TelephoneNumber"/>
                             <Button onClick={handleApply} variant="contained">Apply</Button>
                             {showYesNoDialog ? 
                                 <YesNoModal formReff={formReff.current} open={showYesNoDialog} close={closeDialog}/> : <></>}

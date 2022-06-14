@@ -3,10 +3,10 @@ import ProfileItem from "../Components/ProfileItem";
 import { Logger } from "../Utils/Logger";
 import Button from "@mui/material/Button";
 import RequireAuth from "../Components/RequireAuth";
-import UserModalForm from "../Components/ModalUpdateForms/UserModalForm";
-import AddressModalForm from "../Components/ModalUpdateForms/AddressModalForm";
-import AccountModalForm from "../Components/ModalUpdateForms/AccountModalForm";
-import AccountContainer from "../Components/AccountContainer";
+import UserModalForm from "../Components/ModalForms/UserModalForm";
+import AddressModalForm from "../Components/ModalForms/AddressModalForm";
+import AccountModalForm from "../Components/ModalForms/AccountModalForm";
+import AccountContainer from "../Components/AccountContainerForProfile";
 import { deleteBankAccount } from "../Utils/UtilFunctions";
 import { useAtom } from "jotai";
 import { contextAtom } from "../Components/Context/ContextProvider";
@@ -25,17 +25,13 @@ function ProfileComponent() {
     }
 
     let accounts;
-    if (context.isLoggedIn) {
-        const showDeleteButton = context.user.accounts._accounts.length > 1;
-        accounts = context.user.accounts._accounts.map((account) => {
-            return (
-                <AccountContainer key={account.id} account={account} handleAccountDelete={handleAccountDelete} showDeleteButton={showDeleteButton}/>
-            );
-        });
-    }
-    
-    log.trace("Accounts", accounts); 
-    if (accounts === undefined) return <></>;  
+    const showDeleteButton = context.user.accounts._accounts.length > 1;
+    accounts = context.user.accounts._accounts.map((account) => {
+        return (
+            <AccountContainer key={account.id} account={account} handleAccountDelete={handleAccountDelete} showDeleteButton={showDeleteButton}/>
+        );
+    });
+      
     return (
         <div className="container">
             <h4>My Profile</h4>

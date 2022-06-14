@@ -1,5 +1,18 @@
 body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
     background-color: rgb(240, 240, 240);
+}
+
+main {
+    flex: 1 0 auto;
+    padding: 20px;
+}
+
+#root {
+    display: contents;
+    width: 80%;
 }
 
 select {
@@ -22,4 +35,46 @@ select {
     position: absolute;
     left: 85%;
     top: 7%;
+}
+
+.acc-balance {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    height: 80vh;
+}
+
+.large-text {
+    font-size: 4em;
+}
+
+.logo {
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    padding: 0px 30px;
+}
+
+.logo img {
+    height: 38px;
+}
+
+nav ul a {
+    font-size: 1.2em;
+    font-family: Arial;
+}
+
+.first {
+    float: left;
+}
+
+.second {
+    float: right;
 }

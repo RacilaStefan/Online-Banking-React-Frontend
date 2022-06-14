@@ -11,6 +11,8 @@ export const LOGIN_URL = "/auth/login";
 export const LOGOUT_URL = "/auth/logout";
 export const AUTH_URL = "/auth";
 export const BASE_URL = "http://localhost:8080";
+export const VERIFY_URL = "/auth/enable";
+export const PAY_URL = "/api/v2/transactions";
 
 export const CURRECIES = [
     { key : "RON", value : "RON" },
@@ -41,6 +43,7 @@ export const PATHS = {
     PREFERENCES: "/my/preferences", //setari cont stocate in cookies
     HOME: "/",
     ADMINPAGE: "/admin",
+    VERIFY_USER: "/verify",
 
 };
 
@@ -48,6 +51,8 @@ const reqStr = "Required";
 
 const VALIDATION_SCHEMA_TEMPLATES = {
     REQUIRED_STRING: Yup.string().required(reqStr),
+    REQUIRED_NUMBER: Yup.number().required(reqStr),
+    REQUIRED_DATE: Yup.date("Invalid date format").required(reqStr),
 }
 
 export const VST = VALIDATION_SCHEMA_TEMPLATES;
@@ -60,6 +65,7 @@ export const VALIDATION_SCHEMA = {
     username: VST.REQUIRED_STRING,
     password: VST.REQUIRED_STRING,
     passConfirm: VST.REQUIRED_STRING.oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    twoFACode: VST.REQUIRED_STRING.matches(/^[0-9]{6}$/, "Invalid verification code"),
 
     country: VST.REQUIRED_STRING,
     region: VST.REQUIRED_STRING,
@@ -72,11 +78,53 @@ export const VALIDATION_SCHEMA = {
     cnp: VST.REQUIRED_STRING,
     series: VST.REQUIRED_STRING,
     cnp_number: VST.REQUIRED_STRING,
-    expirationDate: Yup.date("Invalid date format").required("Required"),
+    expirationDate: VST.REQUIRED_DATE,
 
     currency: VST.REQUIRED_STRING,
-    type: VST.REQUIRED_STRING, 
+    type: VST.REQUIRED_STRING,
+    
+    iban: VST.REQUIRED_STRING.length(24, "IBAN invalid"),
+    amount: VST.REQUIRED_NUMBER.min(2, "Min 2").max(10000, "Max 10k"),
 };
+
+export const USER_VALIDATION_SCHEMA = {
+    firstName: VALIDATION_SCHEMA.firstName,
+    lastName: VALIDATION_SCHEMA.lastName,
+    email: VALIDATION_SCHEMA.email,
+    telephoneNumber: VALIDATION_SCHEMA.telephoneNumber,
+    username: VALIDATION_SCHEMA.username,
+    password: VALIDATION_SCHEMA.password,
+    passConfirm: VALIDATION_SCHEMA.passConfirm,
+};
+
+export const ADDRESS_VALIDATION_SCHEMA = {
+    country: VALIDATION_SCHEMA.country,
+    region: VALIDATION_SCHEMA.region,
+    city: VALIDATION_SCHEMA.city,
+    street: VALIDATION_SCHEMA.street,
+    number: VALIDATION_SCHEMA.number,
+    staircase: VALIDATION_SCHEMA.staircase,
+    apartment: VALIDATION_SCHEMA.apartment,
+};
+
+export const CI_VALIDATION_SCHEMA = {
+    cnp: VALIDATION_SCHEMA.cnp,
+    series: VALIDATION_SCHEMA.series,
+    cnp_number: VALIDATION_SCHEMA.cnp_number,
+    expirationDate: VALIDATION_SCHEMA.expirationDate,
+};
+
+export const ACCOUNT_VALIDATION_SCHEMA = {
+    currency: VALIDATION_SCHEMA.currency,
+    type: VALIDATION_SCHEMA.type,
+};
+
+export const TRANSACTION_VALIDATION_SCHEMA = {
+    toIBAN: VALIDATION_SCHEMA.iban,
+    fromIBAN: VALIDATION_SCHEMA.iban,
+    currency: VALIDATION_SCHEMA.currency,
+    amount: VALIDATION_SCHEMA.amount,
+}
 
 Object.freeze(CURRECIES);
 Object.freeze(ACCOUNT_TYPES);
@@ -84,3 +132,8 @@ Object.freeze(ROLES);
 Object.freeze(PATHS);
 Object.freeze(VALIDATION_SCHEMA);
 Object.freeze(VST);
+Object.freeze(USER_VALIDATION_SCHEMA);
+Object.freeze(ADDRESS_VALIDATION_SCHEMA);
+Object.freeze(CI_VALIDATION_SCHEMA);
+Object.freeze(ACCOUNT_VALIDATION_SCHEMA);
+Object.freeze(TRANSACTION_VALIDATION_SCHEMA);

@@ -1,5 +1,5 @@
 import ProfileItem from "./ProfileItem";
-import YesNoModal from "./ModalUpdateForms/YesNoModal";
+import YesNoModal from "./ModalForms/YesNoModal";
 import { Button } from "@mui/material";
 import { useState } from "react";
 

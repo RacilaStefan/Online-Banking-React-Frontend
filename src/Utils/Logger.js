@@ -8,24 +8,24 @@ export class Logger {
         console.log(output, "color:#f51e0f", "", "color:#9997fc", "");
     }
 
-    apiError(error) { // from axios docs
-        if (error.response) {
+    apiError(err) { // from axios docs
+        if (err.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
             let output = `${getTime()} ${LOG_TYPES.ERROR} [%c${this.locationName}%c]`;
-            output += ` Request [${error.config.method.toString().toUpperCase()}] ${error.config.baseURL}${error.config.url}`;
-            output += ` failed with status code ${error.response.status}`;
+            output += ` Request [${err.config.method.toString().toUpperCase()}] ${err.config.baseURL}${err.config.url}`;
+            output += ` failed with status code ${err.response.status}`;
 
             console.log(output, "color:#f51e0f", "", "color:#9997fc", "");
-            console.log(`Message "${error.response.data.error}"`);
-        } else if (error.request) {
+            console.log(`Message "${err.response.data.error}"`);
+        } else if (err.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
-            error(error.request);
+            this.error(err.request);
         } else {
             // Something happened in setting up the request that triggered an Error
-            error(error.message);
+            this.error(err.message);
         }
     }
 

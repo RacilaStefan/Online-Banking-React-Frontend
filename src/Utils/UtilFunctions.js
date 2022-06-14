@@ -41,15 +41,12 @@ export async function updateFields(values, context, setContext) {
     const user = {...context.user};
     let isUserKey = false;
     keyFound.forEach( key => {
-        //log.trace("valoarea din user", user[key]);
-        //log.trace("valoarea din parametru", value[key]);
         if (user[key] !== undefined) {
             user[key] = values[key];
             isUserKey = true;
         }
     });
     log.trace("Updated User", user);
-    log.trace("context", context);
     
     if (isUserKey) {
         axios.put(
@@ -61,9 +58,8 @@ export async function updateFields(values, context, setContext) {
                 telephoneNumber: user.telephoneNumber,
             }
         ).then((response) => {
-            log.trace("Setting context with this value", {...context, user: user});
-            setContext({...context, user: user});
-            log.info(response.data);
+            setContext({ok: Date.now()});
+            log.info("User updated");
         }).catch((error) => {
             log.apiError(error);
         });
@@ -86,6 +82,7 @@ export async function updateFields(values, context, setContext) {
         context.user._links.self.href,
         {
             address: {
+                id: address.id,
                 country: address.country,
                 region: address.region,
                 city: address.city,
@@ -96,8 +93,7 @@ export async function updateFields(values, context, setContext) {
             }
         }
     ).then((response) => {
-        log.trace("Setting context with this value", {...context, user: {...context.user, address: address}});
-        setContext({...context, user: {...context.user, address: address}});
+        setContext({ok: Date.now()});
         log.info("Address updated");
     }).catch((error) => {
         log.apiError(error);
@@ -122,8 +118,7 @@ export function deleteBankAccount(accountId, context, setContext) {
     axios.delete(accountLink)
         .then((response) => {
             log.info(response.data);
-            //const updatedContext = 
-            setContext({...context});
+            setContext({ok: Date.now()});
         })
         .catch((error) => {
             log.apiError(error);
@@ -140,7 +135,7 @@ export function createBankAccount(values, context, setContext) {
         })
         .then((response) => {
             log.info(response.data);
-            setContext({isLoggedIn: false});
+            setContext({ok: Date.now()});
         })
         .catch((error) => {
             log.apiError(error);

@@ -15,17 +15,17 @@ const log = new Logger("Address Modal Form");
 const validationSchema = Yup.object({
    currency: VALIDATION_SCHEMA.currency,
    type: VALIDATION_SCHEMA.type,
-})
+});
+
+const initialValues = {
+    currency: 'RON',
+    type: 'CURRENT_ACCOUNT',
+};
 
 export default function AccountModalForm({ open, close: handleClose }) {
     const [ context, setContext ] = useAtom(contextAtom);
     const [ showYesNoDialog, setShowYesNoDialog ] = useState(false);
     const formReff = useRef(null);
-    
-    const initialValues = {
-        currency: 'RON',
-        type: 'CURRENT_ACCOUNT',
-    };
 
     const closeDialog = () => {
         setShowYesNoDialog(false);

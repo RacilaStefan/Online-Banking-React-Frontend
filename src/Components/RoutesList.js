@@ -10,10 +10,12 @@ import Logout from "../Routes/Logout";
 import Profile from "../Routes/Profile";
 import Dashboard from "../Routes/Dashboard";
 import AdminPage from "../Routes/AdminPage";
+import VerifyUser from "../Routes/VerifyUser";
 
 export default function RoutesList() {
   return (
-    <Routes>
+    <main>
+      <Routes>
         <Route path={PATHS.HOME} element={<Home />}/>
         <Route path={PATHS.LOGIN} element={<Login />} />
         <Route path={PATHS.LOGOUT} element={<Logout />} />
@@ -22,7 +24,9 @@ export default function RoutesList() {
         <Route exact path={PATHS.DASHBOARD} element={<Dashboard />} />
         <Route exact path={PATHS.PREFERENCES} element={<></>} />
         <Route path={PATHS.ADMINPAGE} element={<AdminPage />} />
+        <Route path={PATHS.VERIFY_USER} element={<VerifyUser/>} />
         <Route path="*" element={<Error />}/>
-    </Routes>
+      </Routes>
+    </main>
   )
 }

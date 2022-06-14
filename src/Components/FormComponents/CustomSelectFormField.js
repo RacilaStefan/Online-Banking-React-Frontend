@@ -1,9 +1,10 @@
 import { ErrorMessage, Field} from "formik";
 
-export default function CustomSelectFormField({ name, options }) {
+export default function CustomSelectFormField({ name, options, text = null }) {
 
     return (
         <div className="input-field">
+            {text ? <label className="active" htmlFor={name}>{text}</label> : <></>}
             <Field as="select" name={name}>
                 {options.map(option => {
                     return (

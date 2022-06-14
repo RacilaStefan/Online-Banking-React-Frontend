@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
 import { compareRoles } from "../Utils/UtilFunctions";
 import { Navigate, useLocation } from "react-router-dom";
@@ -12,16 +12,24 @@ export default function RequireAuth({ children, roleRequired }) {
     const [ context ] = useAtom(contextAtom);
     const location = useLocation();
 
-    let _children = useRef(null);
+    const [isAuthorized, setAuthorized] = useState(false);
+    const isLoaded = useRef(false);
     useEffect(() => {
 		if (!context.isLoggedIn || !compareRoles(context.user.role, roleRequired)) {
 			log.info("Unauthorized");
-			_children.current = <Navigate to={PATHS.LOGIN} replace/>;
-			return
+			setAuthorized(false);
+		} else {
+			log.info("Authorized");
+			setAuthorized(true);
 		}
-		log.info("Authorized");
-		_children.current = children;
-    }, [location]);
-	
-	return _children.current;
-  }
+		isLoaded.current = true;
+    }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+        log.info("Mounted");
+    }, []);
+
+    log.info("Rendered");
+
+	return isAuthorized ? <>{children}</> : <></>;
+}

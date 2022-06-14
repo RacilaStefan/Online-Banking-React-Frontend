@@ -6,6 +6,7 @@ import { PATHS, ROLES } from "../../Utils/Constants";
 import NavItem from "./NavItem";
 import { Logger } from "../../Utils/Logger";
 import { useAtom } from "jotai";
+import logo from "../../resources/media/logo.png"
 
 const log = new Logger("Header Component");
 
@@ -13,8 +14,6 @@ export default function Header() {
     const [ context ] = useAtom(contextAtom);
 
     const userNav = [];
-
-    log.trace("context", context);
     if (context.isLoggedIn !== undefined && context.isLoggedIn) {
         userNav.push(<NavItem key={PATHS.DASHBOARD} path={PATHS.DASHBOARD}>Dashboard</NavItem>);
         userNav.push(<NavItem key={PATHS.PROFILE} path={PATHS.PROFILE}>Profile</NavItem>);
@@ -32,17 +31,22 @@ export default function Header() {
     }
 
     useEffect(() => {
-        //log.info("Mounted");
+        log.info("Mounted");
     }, []);
 
+    log.info("Rendered");
     return (
-        <nav>
-            <div className="nav-wrapper">
-                <NavLink to={PATHS.HOME} className="brand-logo">Logo</NavLink>
-                <ul className="right">
-                    {userNav}
-                </ul>
-            </div>
-        </nav>
+        <header>
+            <nav>
+                <div className="nav-wrapper">
+                    <NavLink to={PATHS.HOME} className="logo">
+                        <img src={logo} alt="Logo"/>
+                    </NavLink>
+                    <ul className="right">
+                        {userNav}
+                    </ul>
+                </div>
+            </nav>
+        </header>
     );
 }

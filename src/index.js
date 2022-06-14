@@ -20,15 +20,15 @@ import ContextProvider from "./Components/Context/ContextProvider";
 const log = new Logger("Index Page");
 
 ReactDOM.render(
-  //<React.StrictMode>
+  <React.StrictMode>
     <BrowserRouter>
       <ContextProvider>
-          <Header />
-            <RoutesList/>
-          <Footer />
+        <Header />
+        <RoutesList/>
+        <Footer />
       </ContextProvider>
     </BrowserRouter>,
-  //</React.StrictMode>,
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

@@ -1,7 +1,7 @@
 import { Logger } from "../Utils/Logger";
 import { Button } from "@mui/material";
 import { useState } from "react";
-import ProfileItemFrom from "./ModalUpdateForms/ProfileItemModalForm";
+import ProfileItemFrom from "./ModalForms/ProfileItemModalForm";
 
 const log = new Logger("Profile Item");
 

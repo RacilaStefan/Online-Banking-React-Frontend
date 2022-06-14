@@ -1,17 +1,29 @@
 import { Form, Formik } from "formik";
-import React from "react"
+import React, { useState, useRef } from "react"
 import axios from "../api/axios"
-import { REGISTER_URL, VALIDATION_SCHEMA } from "../Utils/Constants";
+import { USER_VALIDATION_SCHEMA, 
+    ACCOUNT_VALIDATION_SCHEMA, 
+    ADDRESS_VALIDATION_SCHEMA, 
+    CI_VALIDATION_SCHEMA, 
+    REGISTER_URL } from "../Utils/Constants";
 import * as Yup from "yup";
 import UserRegistrationForm from "../Components/RegistrationForms/UserRegistrationForm";
 import AddressRegistrationForm from "../Components/RegistrationForms/AddressRegistrationForm";
 import CIRegistrationForm from "../Components/RegistrationForms/CIRegistrationForm";
 import AccountRegistrationForm from "../Components/RegistrationForms/AccountRegistrationForm";
 import { Logger } from "../Utils/Logger";
+import { Button } from "@mui/material";
 
-const NUMBER_OF_FORMS = 3
+const NUMBER_OF_FORMS = 3 // begins from 0
 
 const log = new Logger("Register Page");
+
+const schemas = [
+    USER_VALIDATION_SCHEMA, 
+    ADDRESS_VALIDATION_SCHEMA, 
+    CI_VALIDATION_SCHEMA, 
+    ACCOUNT_VALIDATION_SCHEMA
+];
 
 const initialValues = {
     firstName: 'Popescu',
@@ -39,36 +51,38 @@ const initialValues = {
     type: 'CURRENT_ACCOUNT',
 };
 
-export default class Register extends React.Component {
+export default function Register() {
 
-    state = {
-        currentForm: 0,
-        submitButtonString: "Next",
-    };
+    const [ state, setState ] = useState(0);
+    const [ submitButtonString, setSubmitButtonString] = useState("Next");
 
-    handleBackButton = () => {
-        let currentForm = this.state.currentForm;
+    const validationSchema = useRef(Yup.object({ ...schemas[state] }))
+
+    const handleBackButton = () => {
+        let currentForm = state;
         currentForm = currentForm > 0 ? currentForm - 1 : 0;
         let btnString = currentForm === NUMBER_OF_FORMS ? "Sumbit" : "Next";
-        this.setState({
-            currentForm: currentForm,
-            submitButtonString: btnString,
-        });
+
+        validationSchema.current = Yup.object({ ...schemas[currentForm] })
+
+        setState(currentForm);
+        setSubmitButtonString(btnString);
     }
 
-    handleNextButton = () => {
-        let currentForm = this.state.currentForm;
+    const handleNextButton = () => {
+        let currentForm = state;
         currentForm += 1;
         let btnString = currentForm === NUMBER_OF_FORMS ? "Sumbit" : "Next";
-        this.setState({
-            currentForm: currentForm,
-            submitButtonString: btnString,
-        });
+        
+        validationSchema.current = Yup.object({ ...schemas[currentForm] })
+
+        setState(currentForm);
+        setSubmitButtonString(btnString);
     }
 
-    handleSubmit = (values) => {
-        if (this.state.currentForm < NUMBER_OF_FORMS) {
-            this.handleNextButton();
+    const handleSubmit = (values) => {
+        if (state < NUMBER_OF_FORMS) {
+            handleNextButton();
             return
         }
 
@@ -103,9 +117,6 @@ export default class Register extends React.Component {
                         type: values.type,
                     },
                 ],
-            },
-            {
-                header: {'Content-Type' : 'aplication/json'},
             }).then((response) => {
                 log.trace("Response from register", response.data);
             }).catch((error) => {
@@ -113,32 +124,28 @@ export default class Register extends React.Component {
             });
     }
 
-    render() {
-        let currentForm;
-        switch (this.state.currentForm) {
-            case 0: currentForm = <UserRegistrationForm/>; break;
-            case 1: currentForm = <AddressRegistrationForm/>; break;
-            case 2: currentForm = <CIRegistrationForm/>; break;
-            case 3: currentForm = <AccountRegistrationForm/>; break;
-            default: break;
-        }
-
-        log.trace("Current Form", this.state.currentForm);
-        
-        return (
-            <Formik
-                initialValues = {initialValues}
-                validationSchema = {Yup.object({...VALIDATION_SCHEMA})}
-                onSubmit = {this.handleSubmit}
-            >
-                <Form>
-                    {currentForm}
-                    <div className="container">
-                        <button type="button" className="btn waves-effect waves-light" onClick={this.handleBackButton}> Back </button>
-                        <input type="submit" className="btn waves-effect waves-light" value={this.state.submitButtonString}/>
-                    </div>
-                </Form>
-            </Formik>
-        );
+    let currentForm;
+    switch (state) {
+        case 0: currentForm = <UserRegistrationForm/>; break;
+        case 1: currentForm = <AddressRegistrationForm/>; break;
+        case 2: currentForm = <CIRegistrationForm/>; break;
+        case 3: currentForm = <AccountRegistrationForm/>; break;
+        default: break;
     }
+        
+    return (
+        <Formik
+            initialValues = {initialValues}
+            validationSchema = {validationSchema.current}
+            onSubmit = {handleSubmit}
+        >
+            <Form>
+                {currentForm}
+                <div className="container">
+                    {state !== 0 ? <Button className="btn waves-effect waves-light" onClick={handleBackButton}> Back </Button> : <></>}
+                    <Button type="submit" className="btn waves-effect waves-light">{submitButtonString}</Button>
+                </div>
+            </Form>
+        </Formik>
+    );
 }

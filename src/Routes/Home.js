@@ -11,11 +11,9 @@ export default function Home() {
     const [users, setUsers] = useState({});
 
     useEffect(() => {
-        //log.info("Mounted");
         axios.get("https://baconipsum.com/api/?type=all-meat&paras=2", { withCredentials: false })
             .then((response) => {
                 const text = response.data;
-                //log.info("Text from bacon ipsum fetched.");
                 setBaconIpsum(text);
             }).catch((error) => {
                 log.apiError(error);
@@ -30,6 +28,11 @@ export default function Home() {
             });
     }, []);
 
+    useEffect(() => {
+        log.info("Mounted");
+    }, []);
+
+    log.info("Rendered");
     return (
         <div className="container">
             <h4>Home</h4>
