@@ -11,8 +11,11 @@ export const LOGIN_URL = "/auth/login";
 export const LOGOUT_URL = "/auth/logout";
 export const AUTH_URL = "/auth";
 export const BASE_URL = "http://localhost:8080";
+//export const BASE_URL = "http://26.193.78.172:8000";
 export const VERIFY_URL = "/auth/enable";
 export const PAY_URL = "/api/v2/transactions";
+
+export const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export const CURRECIES = [
     { key : "RON", value : "RON" },

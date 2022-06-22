@@ -2,8 +2,8 @@ import CustomTextFormField from "../../Components/FormComponents/CustomTextFormF
 
 export default function AddressRegistrationForm() {
     return (
-        <div className="container">
-            <p className="red-text">Address</p>
+        <div className="container form">
+            <p className="modal-form-title">Address</p>
             <CustomTextFormField name="country" text="Country"/>
             <CustomTextFormField name="region" text="Region"/>
             <CustomTextFormField name="city" text="City"/>

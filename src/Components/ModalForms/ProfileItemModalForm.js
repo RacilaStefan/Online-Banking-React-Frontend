@@ -51,7 +51,7 @@ export default function ProfileItemFrom({ value, name, label, open, close: handl
 
             <div className="container modal-form">
                 <div id="modal-modal-description">
-                    <p> { label } </p>
+                    <p className="modal-form-smaller-title"> { label } </p>
                     <Formik
                         initialValues={initialValue}
                         innerRef={formReff}

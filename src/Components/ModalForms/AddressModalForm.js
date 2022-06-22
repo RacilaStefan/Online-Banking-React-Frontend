@@ -76,7 +76,7 @@ export default function AddressModalForm({ open, close: handleClose }) {
 
             <div className="container modal-form">
                 <div id="modal-modal-description">
-                    <p> Edit Address </p>
+                    <p className="modal-form-title"> Edit Address </p>
                     <Formik
                         initialValues={initialValues}
                         innerRef={formReff}

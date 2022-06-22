@@ -2,8 +2,8 @@ import CustomTextFormField from "../FormComponents/CustomTextFormField";
 
 export default function UserRegistrationForm() {
     return (
-        <div className="container">
-            <p className="red-text">User Details</p>
+        <div className="container form">
+            <p className="modal-form-title">User Details</p>
             <CustomTextFormField name="firstName" text="First Name"/>
             <CustomTextFormField name="lastName" text="Last Name"/>
             <CustomTextFormField name="email" text="Email"/>

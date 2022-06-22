@@ -23,14 +23,14 @@ export default function YesNoModal({ text = "Are you sure?", formReff, open, clo
             onClose={() => handleClose(false)}
             aria-labelledby={ "modal-modal-title" }
             aria-describedby={ "modal-modal-description" }>
-            <div className="container modal-form">
-                <h4 className="modal-modal-title center">{text}</h4>
-                <div className="modal-modal-description center">
-                    <Button variant="outlined" onClick={() => handleClose(true)}>
-                        Yes
-                    </Button>
-                    <Button variant="outlined" onClick={() => handleClose(false)}>
+            <div className="modal-form yesnomodal">
+                <h4 className="modal-modal-title center small-title">{text}</h4>
+                <div className="modal-modal-description center container">
+                    <Button variant="outlined" onClick={() => handleClose(false)} className="first">
                         No
+                    </Button>
+                    <Button variant="outlined" onClick={() => handleClose(true)} className="second">
+                        Yes
                     </Button>
                 </div>
             </div>

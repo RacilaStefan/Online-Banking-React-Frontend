@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 
 //CSS
-import "normalize.css";
 import "materialize-css/dist/css/materialize.min.css";
 import "./resources/css/index.css";
 
@@ -27,7 +26,7 @@ ReactDOM.render(
         <RoutesList/>
         <Footer />
       </ContextProvider>
-    </BrowserRouter>,
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

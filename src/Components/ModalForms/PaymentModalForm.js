@@ -95,13 +95,13 @@ export default function PaymentForm({open, close: handleClose, account: sourceAc
                         >
                         <Form>
                             { state === 0 ? <>
-                                <p> New Payment </p>
+                                <p className="modal-form-title"> New Payment </p>
                                 <CustomSelectFormField name="fromIBAN" options={userAccountsIBAN} text="From Account"/>
                                 <CustomTextFormField name="toIBAN" text="To Account"/>
                                 <CustomSelectFormField name="currency" options={CURRECIES}/>
                                 <CustomTextFormField name="amount" text="Amount"/></>
                             :
-                                <><p> Confirm Payment </p>
+                                <><p className="modal-form-title"> Confirm Payment </p>
                                 <p> {`You are going to transfer ${formReff.current.values.amount} ${formReff.current.values.currency} to this account`} </p>
                                 <p> {`${formReff.current.values.toIBAN}`} </p>
                                 <p> from this account </p>

@@ -14,6 +14,7 @@ export default function RequireAuth({ children, roleRequired }) {
 
     const [isAuthorized, setAuthorized] = useState(false);
     const isLoaded = useRef(false);
+	const [redirect, setRedirect] = useState(<></>);
     useEffect(() => {
 		if (!context.isLoggedIn || !compareRoles(context.user.role, roleRequired)) {
 			log.info("Unauthorized");
@@ -26,10 +27,17 @@ export default function RequireAuth({ children, roleRequired }) {
     }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
+		if (!isAuthorized)
+			setRedirect(<Navigate to={PATHS.LOGIN}/>);
+		else 
+			setRedirect(<></>);
+	}, [isAuthorized]);
+
+	useEffect(() => {
         log.info("Mounted");
     }, []);
 
     log.info("Rendered");
 
-	return isAuthorized ? <>{children}</> : <></>;
+	return isAuthorized ? <>{children}</> : <>{redirect}</>;
 }

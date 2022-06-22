@@ -8,7 +8,6 @@ const log = new Logger("Home Page");
 export default function Home() {
 
     const [baconipsum, setBaconIpsum] = useState([]);
-    const [users, setUsers] = useState({});
 
     useEffect(() => {
         axios.get("https://baconipsum.com/api/?type=all-meat&paras=2", { withCredentials: false })
@@ -16,14 +15,6 @@ export default function Home() {
                 const text = response.data;
                 setBaconIpsum(text);
             }).catch((error) => {
-                log.apiError(error);
-            });
-        
-        axios.get(USER_BASE_URL)
-            .then((reponse) => {
-                const users = reponse.data;
-                setUsers({...users});
-            }).catch(function(error) {
                 log.apiError(error);
             });
     }, []);
@@ -37,7 +28,6 @@ export default function Home() {
         <div className="container">
             <h4>Home</h4>
             <p>{baconipsum}</p>
-            <pre>{JSON.stringify(users, null, 2)}</pre>
         </div>
     );
 }

@@ -58,7 +58,7 @@ export default function AccountModalForm({ open, close: handleClose }) {
 
             <div className="container modal-form">
                 <div id="modal-modal-description">
-                    <p> Add account </p>
+                    <p className="modal-form-title"> Add account </p>
                     <Formik
                         initialValues={initialValues}
                         innerRef={formReff}

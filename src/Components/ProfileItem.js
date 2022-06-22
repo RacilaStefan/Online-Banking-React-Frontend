@@ -16,14 +16,14 @@ export default function ProfileItem({ label, value, isEditable = true, name }) {
     return (
         <div className="card-panel hoverable row">
             <div className="col s6">
-                <p>{label}</p>
+                <p className="profile-item-label">{label}</p>
                 <div>
                     {value}
                 </div>
             </div>
             { isEditable ? 
-            <div className="col s6">
-                <Button variant="contained" onClick={handleOpen}>Edit</Button>
+            <div className="second">
+                <Button variant="outlined" onClick={handleOpen}>Edit</Button>
                 <ProfileItemFrom open={open} close={handleClose} value={value} name={name} label={label} />
             </div> : <></> }
         </div>

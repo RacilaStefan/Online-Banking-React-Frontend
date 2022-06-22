@@ -12,9 +12,11 @@ import AddressRegistrationForm from "../Components/RegistrationForms/AddressRegi
 import CIRegistrationForm from "../Components/RegistrationForms/CIRegistrationForm";
 import AccountRegistrationForm from "../Components/RegistrationForms/AccountRegistrationForm";
 import { Logger } from "../Utils/Logger";
-import { Button } from "@mui/material";
+import { Button, Step, StepLabel, Stepper } from "@mui/material";
 
 const NUMBER_OF_FORMS = 3 // begins from 0
+
+const steps = ["User Details", "Address Details", "Identity Card Details", "Bank Account Type Selection"];
 
 const log = new Logger("Register Page");
 
@@ -142,9 +144,18 @@ export default function Register() {
             <Form>
                 {currentForm}
                 <div className="container">
-                    {state !== 0 ? <Button className="btn waves-effect waves-light" onClick={handleBackButton}> Back </Button> : <></>}
-                    <Button type="submit" className="btn waves-effect waves-light">{submitButtonString}</Button>
+                    {state !== 0 ? <Button variant="outlined" className="first" onClick={handleBackButton}> Back </Button> : <></>}
+                    <Button variant="outlined" type="submit" className="second">{submitButtonString}</Button>
                 </div>
+                <Stepper activeStep={state} alternativeLabel className="stepper">
+                    {steps.map((label) => {
+                        return (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        );
+                    })}
+                </Stepper>
             </Form>
         </Formik>
     );

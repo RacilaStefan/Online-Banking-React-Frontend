@@ -68,7 +68,7 @@ export default function UserModalForm({ open, close: handleClose }) {
 
             <div className="container modal-form">
                 <div id="modal-modal-description">
-                    <p> Edit User </p>
+                    <p className="modal-form-title"> Edit User </p>
                     <Formik
                         initialValues={initialValues}
                         innerRef={formReff}

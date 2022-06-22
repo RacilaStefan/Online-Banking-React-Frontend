@@ -1,5 +1,5 @@
 import axios from "../api/axios";
-import { AUTH_URL, ROLES } from "./Constants";
+import { AUTH_URL, DAYS, ROLES } from "./Constants";
 import { Logger } from "./Logger";
 
 const log = new Logger("Utility Functions script");
@@ -26,6 +26,13 @@ export async function fetchUserData() {
         response = await (await axios.get(data._links.accounts.href)).data;
         data.accounts = { _accounts: response._embedded.accountDtoes, _links: response._links };
         //log.trace("User data with accounts added", data);
+
+        response = await (await axios.get(data._links.transactions.href)).data;
+        if (response._embedded) {
+            data.transactions = { _transactions: response._embedded.transactionDtoes, _links: response._links };
+        } else {
+            data.transactions = { _transactions: [], _links: response._links };
+        }
     } catch (error) {
         log.apiError(error);
         return false;
@@ -140,6 +147,15 @@ export function createBankAccount(values, context, setContext) {
         .catch((error) => {
             log.apiError(error);
         })
+}
+
+export function getFormattedDateString(date) {
+    let dateObj = new Date(date);
+    log.trace("zi", dateObj.getDate());
+    log.trace("luna", dateObj.getMonth() + 1);
+    log.trace("an", dateObj.getFullYear());
+    log.trace("ora", dateObj.toLocaleTimeString('en-US', { hour12: false }));
+    return `${DAYS[dateObj.getDay()]}, ${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()} ${dateObj.toLocaleTimeString('en-US', { hour12: false })}`;
 }
 
 function getRoleComparableValue(role) {

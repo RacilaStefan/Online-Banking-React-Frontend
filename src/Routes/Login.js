@@ -2,16 +2,18 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "../api/axios";
 import { LOGIN_URL, PATHS, VALIDATION_SCHEMA } from "../Utils/Constants";
-import { fetchUserData } from "../Utils/UtilFunctions";
 import { Navigate } from "react-router-dom";
 import { Logger } from "../Utils/Logger";
-import Button from "@mui/material/Button";
+import { Button, Step, StepLabel, Stepper } from "@mui/material";
 import CustomTextFormField from "../Components/FormComponents/CustomTextFormField";
 import { useAtom } from "jotai";
 import { contextAtom } from "../Components/Context/ContextProvider";
 import { useRef, useState } from "react";
+import { useEffect } from "react";
 
 const log = new Logger("Login Page");
+
+const steps = ["Enter credentials", "Check email for 2FA code"];
 
 const NUMBER_OF_FORMS = 1;
 
@@ -31,7 +33,14 @@ export default function Login() {
         password: VALIDATION_SCHEMA.password,
     }))
 
-    const redirect = context.isLoggedIn ? <Navigate to={PATHS.DASHBOARD}/> : <></>;
+    const [ redirect, setRedirect ] = useState(<></>);
+    
+    useEffect(() => {
+        if (context.isLoggedIn)
+            setRedirect(<Navigate to={PATHS.DASHBOARD}/>);
+        else
+            setRedirect(<></>);
+    }, []);
     
     const handleBackButton = () => {
         let currentForm = state;
@@ -76,17 +85,6 @@ export default function Login() {
                 twoFACode: values.twoFACode,
             })
             .then((response) => {
-                // async function fetchData() {
-                //     const data = await fetchUserData();
-                //     //log.trace("Fetched data", data);
-                //     if (data === false) {
-                //         setContext({ isLoggedIn: false });
-                //     } else {
-                //         setContext({ isLoggedIn: true, user: {...data}});
-                //     }
-                // }
-    
-                // fetchData();
                 if (state === NUMBER_OF_FORMS)
                     setContext({ok: Date.now()});
                 log.info(response.data);
@@ -97,7 +95,7 @@ export default function Login() {
     }
 
     return (
-        <div className="container">
+        <>
             {redirect} 
             <Formik
                 initialValues={initialValues}
@@ -105,18 +103,32 @@ export default function Login() {
                 onSubmit={(values) => handleSubmit(values)}
                 >
                 <Form>
-                    { state === 0 ? 
-                        <><CustomTextFormField name="username" text="Username"/>
-                        <CustomTextFormField name="password" text="Password" type="password"/></>
-                        :
-                        <CustomTextFormField name="twoFACode" text="Verification Code"/>
-                    }
-                    <div className="container">
-                        {state !== 0 ? <Button className="btn waves-effect waves-light" onClick={handleBackButton}> Back </Button> : <></>}
-                        <Button type="submit"  className="btn waves-effect waves-light">{submitButtonString}</Button>
+                    <div className="container form">
+                        { state === 0 ? 
+                            <>
+                            <p className="modal-form-title">Credentials</p>
+                            <CustomTextFormField name="username" text="Username"/>
+                            <CustomTextFormField name="password" text="Password" type="password"/></>
+                            :
+                            <><p className="modal-form-title">2FA Code</p>
+                            <CustomTextFormField name="twoFACode" text="Verification Code"/></>
+                        }
                     </div>
+                    <div className="container">
+                        {state !== 0 ? <Button variant="outlined" className="first" onClick={handleBackButton}> Back </Button> : <></>}
+                        <Button type="submit" variant="outlined" className="second">{submitButtonString}</Button>
+                    </div>
+                    <Stepper activeStep={state} alternativeLabel className="stepper">
+                        {steps.map((label) => {
+                            return (
+                                <Step key={label}>
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
+                            );
+                        })}
+                    </Stepper>
                 </Form>
             </Formik>
-        </div>
+        </>
     );
 }
