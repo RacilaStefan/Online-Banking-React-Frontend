@@ -24,7 +24,6 @@ export default function ContextProvider({ children }) {
                 _context = { isLoggedIn: true, user: {...data}}
                 setContext(_context);
             }
-            //setLoaded(true);
             log.trace("Context set with value", _context);
         }
 

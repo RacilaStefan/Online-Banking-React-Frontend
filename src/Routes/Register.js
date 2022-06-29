@@ -44,9 +44,9 @@ const initialValues = {
     staircase: 'asd',
     apartment: 'asd',
 
-    cnp: 'asd',
-    series: 'asas',
-    cnp_number: 'asdasd',
+    cnp: '1231231231112',
+    series: 'FG',
+    cnp_number: '123123',
     expirationDate: '09/06/2026',
 
     currency: 'RON',
@@ -77,6 +77,7 @@ export default function Register() {
         let btnString = currentForm === NUMBER_OF_FORMS ? "Sumbit" : "Next";
         
         validationSchema.current = Yup.object({ ...schemas[currentForm] })
+        log.trace("Validation Schema", validationSchema.current);
 
         setState(currentForm);
         setSubmitButtonString(btnString);

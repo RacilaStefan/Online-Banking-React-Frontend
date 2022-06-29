@@ -8,20 +8,30 @@ const log = new Logger("Verify User");
 
 
 export default function VerifyUser() {
-    const [query] = useSearchParams();
+    let [query] = useSearchParams();
 	const [ output, setOutput ] = useState("Waiting for verification");
+	log.trace("Query value", query.entries().next().value);
+	if (query.entries().next().value === undefined) {
+		query = "undefined";
+	}
 
     useEffect(() => {
-		axios.post(VERIFY_URL, query.entries().next().value[0], { headers: { "Content-Type": "text/plain" }}
-			).then((response) => {
-				log.info(response.data);
-				setOutput("Verification complete");
-			}).catch((error) => {
-				log.apiError(error);
-				setOutput("Error");
-			});
+		if (query !== "undefined") {
+			axios.post(VERIFY_URL, query.entries().next().value[0], { headers: { "Content-Type": "text/plain" }}
+				).then((response) => {
+					log.info(response.data);
+					setOutput("Verification complete");
+				}).catch((error) => {
+					log.apiError(error);
+					setOutput("Error");
+				});
+		}
+		else {
+			setOutput("Error");
+		}
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+	if (query !== "undefined")
 	log.trace("Query value", query.entries().next().value[0]);
 
   return (

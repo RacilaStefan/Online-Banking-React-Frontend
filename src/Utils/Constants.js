@@ -50,25 +50,38 @@ export const PATHS = {
 
 };
 
-const reqStr = "Required";
+const reqStr = "Required field.";
 
 const VALIDATION_SCHEMA_TEMPLATES = {
     REQUIRED_STRING: Yup.string().required(reqStr),
     REQUIRED_NUMBER: Yup.number().required(reqStr),
-    REQUIRED_DATE: Yup.date("Invalid date format").required(reqStr),
+    REQUIRED_DATE: Yup.date("Invalid date format.").required(reqStr),
+    REQUIRED_EMAIL: Yup.string().required(reqStr).email("Check email format."),
+    REQUIRED_PHONENUMBER: Yup.string().required(reqStr).matches(/^[0-9]{10}$/, "Invalid telephone number."),
+    REQUIRED_NAME: Yup.string().required(reqStr).matches(/^[A-Z][a-zA-Z \-]{2,100}$/, "Invalid name."),
+    REQUIRED_USERNAME: Yup.string().required(reqStr).matches(/^[A-Za-z0-9_]{8,100}$/, "Invalid username."),
+    REQUIRED_PASSWORD: Yup.string().required(reqStr).matches(/^[A-Za-z0-9~!@#$%^&*()_=+{};:<>,.?'"\[\]\-/]{12,100}$/, "Invalid password."),
+    REQUIRED_2FACODE: Yup.string().required(reqStr).matches(/^[0-9]{6}$/, "Invalid verification code."),
+    REQUIRED_IBAN: Yup.string().required(reqStr).length(24, "Invalid IBAN."),
+    REQUIRED_AMOUNT: Yup.number().required(reqStr).min(2, "The lowest sum you can transfer is 2 monetary units.").max(10000, "The max sum you can transfer is 10 thousand monetary units."),
+    REQUIRED_CURRENCY: Yup.string().required(reqStr).matches(/^[A-Z]{3}$/, "Invalid currency."),
+    REQUIRED_CNP: Yup.string().required(reqStr).matches(/^[0-9]{13}$/, "Invalid CNP"),
+    REQUIRED_SERIES: Yup.string().required(reqStr).matches(/^[A-Z]{2}$/, "Invalid series"),
+    REQUIRED_CINUMBER: Yup.string().required(reqStr).matches(/^[0-9]{6}$/, "Invalid CI number"),
+
 }
 
 export const VST = VALIDATION_SCHEMA_TEMPLATES;
 
 export const VALIDATION_SCHEMA = {
-    firstName: VST.REQUIRED_STRING,
-    lastName: VST.REQUIRED_STRING,
-    email: VST.REQUIRED_STRING.email("Ckeck email format."),
-    telephoneNumber: VST.REQUIRED_STRING.matches(/^[0-9]{10}$/, "Invalid telephone number."),
-    username: VST.REQUIRED_STRING,
-    password: VST.REQUIRED_STRING,
-    passConfirm: VST.REQUIRED_STRING.oneOf([Yup.ref('password'), null], 'Passwords must match'),
-    twoFACode: VST.REQUIRED_STRING.matches(/^[0-9]{6}$/, "Invalid verification code"),
+    firstName: VST.REQUIRED_NAME,
+    lastName: VST.REQUIRED_NAME,
+    email: VST.REQUIRED_EMAIL,
+    telephoneNumber: VST.REQUIRED_PHONENUMBER,
+    username: VST.REQUIRED_USERNAME,
+    password: VST.REQUIRED_PASSWORD,
+    passConfirm: VST.REQUIRED_STRING.oneOf([Yup.ref('password'), null], 'Passwords must match.'),
+    twoFACode: VST.REQUIRED_2FACODE,
 
     country: VST.REQUIRED_STRING,
     region: VST.REQUIRED_STRING,
@@ -78,16 +91,16 @@ export const VALIDATION_SCHEMA = {
     staircase: VST.REQUIRED_STRING,
     apartment: VST.REQUIRED_STRING,
 
-    cnp: VST.REQUIRED_STRING,
-    series: VST.REQUIRED_STRING,
-    cnp_number: VST.REQUIRED_STRING,
+    cnp: VST.REQUIRED_CNP,
+    series: VST.REQUIRED_SERIES,
+    cnp_number: VST.REQUIRED_CINUMBER,
     expirationDate: VST.REQUIRED_DATE,
 
-    currency: VST.REQUIRED_STRING,
+    currency: VST.REQUIRED_CURRENCY,
     type: VST.REQUIRED_STRING,
     
-    iban: VST.REQUIRED_STRING.length(24, "IBAN invalid"),
-    amount: VST.REQUIRED_NUMBER.min(2, "Min 2").max(10000, "Max 10k"),
+    iban: VST.REQUIRED_IBAN,
+    amount: VST.REQUIRED_AMOUNT,
 };
 
 export const USER_VALIDATION_SCHEMA = {
